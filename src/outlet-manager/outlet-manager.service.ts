@@ -193,7 +193,7 @@ export class OutletService{
                     return product.id
                 }
             })
-            const prodIds = prods.map(product => product.id);
+            const prodIds = prods.map(product => product.id); 
             return this.outletProductRepo.find({
                  where: { productId: In(prodIds), outletId: outlet.id},
                 

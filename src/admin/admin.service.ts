@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AdminOutletFilterDto } from "src/dto/admin-outlet-filter.dto";
 import { OutletStatusDto } from "src/dto/outlet-status.dto";
@@ -76,6 +76,9 @@ export class AdminService{
                                 .where('outlet.city = :city', { city })
 
       const result = await outletQueryBuilder.getRawMany();
+      if(result.length === 0){
+        throw new NotFoundException('No Outlet Found!')
+      }
       const outletIds = result.map((row) => row.outletId);
 
       const queryBuilder = await this.outletService.getAggregateStatus(outletIds) 
@@ -90,6 +93,9 @@ export class AdminService{
                                 .where('outlet.state = :state', { state })
 
       const result = await outletQueryBuilder.getRawMany();
+      if(result.length === 0){
+        throw new NotFoundException('No Outlet Found!')
+      }
       const outletIds = result.map((row) => row.outletId);
 
       return this.outletService.getAggregateStatus(outletIds)     
